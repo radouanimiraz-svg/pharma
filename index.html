@@ -214,9 +214,7 @@
                     <div style="font-size:0.85rem; color:#666;">📍 ${p.q} ${p.dist ? `(${p.dist.toFixed(1)} km)` : ''}</div>
                     <div class="btn-group">
                         ${p.g ? `<a href="tel:${p.g}" class="btn" style="background:var(--primary)">📞 Appel</a>` : ''}
-                        <a href="${mapsLink}" target="_blank" class="btn" style="background:var(--dark)">
-                            <img src="${ICON_GPS}" width="16"> Itinéraire
-                        </a>
+                        <a href="${mapsLink}" target="_blank" class="btn" style="background:var(--dark)">📍 Itinéraire</a>
                         <a href="https://wa.me/?text=${waText}" target="_blank" class="btn btn-whatsapp">💬 Partager</a>
                     </div>
                 </div>`;
