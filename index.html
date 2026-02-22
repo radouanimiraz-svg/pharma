@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1e8449">
+    <link rel="manifest" href="manifest.json">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/822/822143.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/822/822143.png">
 
@@ -17,18 +18,13 @@
             --dark: #2c3e50; --bg: #f4f7f6; --card-bg: #ffffff; --text: #2c3e50;
             --whatsapp: #25D366;
         }
-        /* Mode clair forcé pour une meilleure visibilité en journée */
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: var(--text); }
-        
         header { background: var(--primary); color: white; padding: 35px 20px 25px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
         .info-badge { background: var(--gold); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin: -15px auto 15px; display: block; width: fit-content; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
         .container { max-width: 500px; margin: auto; padding: 10px 15px; }
-        
         .search-box { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #ddd; font-size: 16px; margin-bottom: 15px; background: white; color: var(--text); box-sizing: border-box; outline: none; }
         
-        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--gray); position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--gray); position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: transform 0.2s; }
         .card.active-status { border-left-color: var(--primary); }
         .card.garde-status { border-left-color: var(--accent); background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, #ffffff 100%); }
         .card.ferme { opacity: 0.6; filter: grayscale(0.8); }
@@ -43,14 +39,17 @@
         .pill-ferme { background: var(--gray); }
         
         .btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-        .btn { flex: 1; min-width: 90px; padding: 10px 5px; border-radius: 10px; text-decoration: none; text-align: center; font-weight: bold; font-size: 0.8rem; color: white; display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s; }
-        .btn:active { transform: scale(0.96); }
-        
-        .btn-whatsapp { background: var(--whatsapp); }
-        
-        /* Style pour l'icône personnalisée 3D */
-        .btn-loc-icon { width: 18px; height: 18px; object-fit: contain; }
+        .btn { flex: 1; min-width: 100px; padding: 10px 5px; border-radius: 10px; text-decoration: none; text-align: center; font-weight: bold; font-size: 0.8rem; color: white; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn img { filter: brightness(0) invert(1); } /* Force l'icône en blanc */
+        .btn-whatsapp { background: var(--whatsapp); flex: 1.5; }
     </style>
+
+    <script>
+        // Enregistrement du Service Worker pour la PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </head>
 <body>
 
@@ -65,6 +64,7 @@
 
 <script>
     const URL_GARDES = "https://raw.githubusercontent.com/radouanimiraz-svg/pharma/main/gardes.json"; 
+    const ICON_GPS = "https://cdn-icons-png.flaticon.com/512/1673/1673221.png";
 
     const PHARMACIES = [
         { n: "Al Massira Khénifra", ar: "صيدلية المسيرة", q: "Hay Amalou", g: "0535385205", lat: 32.9384, lng: -5.6546 },
@@ -97,13 +97,13 @@
         { n: "Massira Soufla", ar: "المسيرة السفلى", q: "Hay Almassira Soufla", g: "0535384043", lat: 32.9208, lng: -5.6670 },
         { n: "Aliaa", ar: "علياء", q: "Hay Almassira Al Wossta", g: "0535383678", lat: 32.9210, lng: -5.6628 },
         { n: "La Grande", ar: "الكبرى", q: "Hay Almassira Al Wossta", g: "0532323737", lat: 32.9177, lng: -5.6646 },
-        { n: "Errahma", ar: "الرحمة", q: "Hay Almassira", g: "0535588468", lat: 32.9240, lng: -5.6697 },
+        { n: "Errahma", ar: "الرحمة", q: "Hay Almassira", g: "", lat: 32.9240, lng: -5.6697 },
         { n: "Zayane", ar: "زيان", q: "Centre Ville", g: "", lat: 32.9346, lng: -5.6712 },
         { n: "Azir", ar: "أزير", q: "Centre Ville", g: "", lat: 32.9368, lng: -5.6708 },
         { n: "Hamria", ar: "حمرية", q: "Hay Hamria", g: "0535586701", lat: 32.9308, lng: -5.6748 },
         { n: "Al Amal", ar: "الأمل", q: "Hay Hamria", g: "", lat: 32.9330, lng: -5.6723 },
-        { n: "Oum Rabiee", ar: "أم الربيع", q: "Centre Ville", g: "0535586969", lat: 32.9384, lng: -5.6747 },
-        { n: "Nouvelle", ar: "الجديدة", q: "Centre Ville", g: "0535586521", lat: 32.9397, lng: -5.6756 },
+        { n: "Oum Rabiee", ar: "أم الربيع", q: "Centre Ville", g: "", lat: 32.9384, lng: -5.6747 },
+        { n: "Nouvelle", ar: "الجديدة", q: "Centre Ville", g: "", lat: 32.9397, lng: -5.6756 },
         { n: "Principale", ar: "الرئيسية", q: "Centre Ville", g: "0535384606", lat: 32.9393, lng: -5.6718 },
         { n: "Atlas Healing", ar: "أطلس هيلينك", q: "Hay Essalam", g: "", lat: 32.9433, lng: -5.6700 },
         { n: "Ezzohour", ar: "الزهور", q: "Hay Essalam", g: "", lat: 32.9435, lng: -5.6754 },
@@ -115,24 +115,29 @@
         { n: "Walili", ar: "وليلي", q: "Hay Al Fath", g: "0535383746", lat: 32.9483, lng: -5.6831 },
         { n: "Tiaallalin", ar: "تيعلالين", q: "Hay Tiallaline", g: "", lat: 32.9388, lng: -5.6772 },
         { n: "Atlas", ar: "أطلس", q: "Centre Ville", g: "0535586506", lat: 32.9362, lng: -5.6738 },
-        { n: "Aglmam azegza", ar: "أكلمام أزكزا", q: "Bd Ezzarktouni", g: "0535385496", lat: 32.9350, lng: -5.6677 }
+        { n: "Aglmam azegza", ar: "أكلمام أزكزا", q: "Bd Ezzarktouni", g: "", lat: 32.9350, lng: -5.6677 }
     ];
 
     let configG = { jour: [], nuit: {} };
     let userPos = null;
 
-    async function init() {
+    async function fetchGardes() {
         try {
             const res = await fetch(URL_GARDES + "?t=" + Date.now());
             configG = await res.json();
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    userPos = {lat: pos.coords.latitude, lng: pos.coords.longitude};
-                    renderAll();
-                }, () => renderAll(), {timeout: 5000});
-            }
-            renderAll();
-        } catch (e) { document.getElementById('main-list').innerHTML = "Erreur de connexion."; }
+        } catch (e) { console.error("Erreur de récupération des gardes", e); }
+    }
+
+    async function init() {
+        await fetchGardes();
+        renderAll();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                userPos = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+                renderAll();
+            }, () => renderAll(), {timeout: 5000});
+        }
+        setInterval(renderAll, 30000);
     }
 
     function isRamadan() {
@@ -150,9 +155,8 @@
         const curMin = now.getHours() * 60 + now.getMinutes();
         const ramadan = isRamadan();
 
-        // Ouverture Normale
         let isNormalHours = false;
-        const openMin = ramadan ? 570 : 540; // 09:30 vs 09:00
+        const openMin = ramadan ? 570 : 540; 
         if (day >= 1 && day <= 5) {
             if ((curMin >= openMin && curMin < 780) || (curMin >= 960 && curMin < 1200)) isNormalHours = true;
         } else if (day === 6) {
@@ -162,24 +166,26 @@
         const isGardeJour = configG.jour?.includes(pName);
         const isWeekendClosed = (day === 0) || (day === 6 && curMin >= 780);
 
-        // Garde de NUIT stricte
         let checkDay = day; 
         if (curMin < 480) checkDay = (day === 0) ? 6 : day - 1;
         const isGardeNuit = configG.nuit?.[checkDay] === pName;
         
-        const nightStart = ramadan ? 1410 : 1260; // 23h30 vs 21h00
+        const nightStart = ramadan ? 1410 : 1260; 
         const isNightTime = (curMin >= nightStart || curMin < 480);
 
         if (isNormalHours) return "OUVERT";
         if (isGardeJour && isWeekendClosed) return "GARDE";
         if (isGardeNuit && isNightTime) return "GARDE";
-        
         return "FERMÉ";
     }
 
     function renderAll() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        let list = PHARMACIES.map(p => ({ ...p, dist: userPos ? getDist(userPos.lat, userPos.lng, p.lat, p.lng) : null, status: getStat(p.n) }));
+        let list = PHARMACIES.map(p => ({ 
+            ...p, 
+            dist: userPos ? getDist(userPos.lat, userPos.lng, p.lat, p.lng) : null, 
+            status: getStat(p.n) 
+        }));
 
         list.sort((a, b) => {
             const aActive = a.status !== "FERMÉ";
@@ -194,9 +200,9 @@
             const s = p.status;
             const cardClass = s === "GARDE" ? "garde-status" : (s === "OUVERT" ? "active-status" : "ferme");
             
-            // Préparation des liens
-            const mapsLink = `https://www.google.com/maps?q=${p.lat},${p.lng}`;
-            const waText = encodeURIComponent(`📍 *PHARMACIE DE GARDE KHÉNIFRA*\n\n🏛️ Nom: ${p.n}\n🏡 Quartier: ${p.q}\n🔗 Localisation: ${mapsLink}`);
+            // Lien Google Maps corrigé
+            const mapsLink = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+            const waText = encodeURIComponent(`Pharmacie: ${p.n}\nQuartier: ${p.q}\nPosition: ${mapsLink}`);
 
             html += `
                 <div class="card ${cardClass}">
@@ -205,15 +211,13 @@
                         <div class="name-fr">Ph. ${p.n}</div>
                         <div class="name-ar" dir="rtl">${p.ar}</div>
                     </div>
-                    <div style="font-size:0.85rem; color:#666; margin-bottom:10px;">📍 ${p.q} ${p.dist ? `(${p.dist.toFixed(1)} km)` : ''}</div>
+                    <div style="font-size:0.85rem; color:#666;">📍 ${p.q} ${p.dist ? `(${p.dist.toFixed(1)} km)` : ''}</div>
                     <div class="btn-group">
                         ${p.g ? `<a href="tel:${p.g}" class="btn" style="background:var(--primary)">📞 Appel</a>` : ''}
-                        
-                        <a href="${mapsLink}" target="_blank" class="btn" style="background:var(--dark)">📍 Aller</a>
-                        
-                        <a href="https://wa.me/?text=${waText}" target="_blank" class="btn btn-whatsapp">
-                            💬 Partager
+                        <a href="${mapsLink}" target="_blank" class="btn" style="background:var(--dark)">
+                            <img src="${ICON_GPS}" width="16"> Itinéraire
                         </a>
+                        <a href="https://wa.me/?text=${waText}" target="_blank" class="btn btn-whatsapp">💬 Partager</a>
                     </div>
                 </div>`;
         });
@@ -228,7 +232,6 @@
     }
 
     init();
-    setInterval(renderAll, 30000);
 </script>
 </body>
 </html>
