@@ -1,0 +1,16 @@
+{
+  "name": "Pharmacie de Garde Khénifra",
+  "short_name": "Pharma Khén",
+  "description": "Trouvez la pharmacie de garde la plus proche à Khénifra.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f4f7f6",
+  "theme_color": "#1e8449",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/822/822143.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
