@@ -16,48 +16,47 @@
             --primary: #1e8449; --accent: #e74c3c; --gold: #d4af37; --gray: #95a5a6; 
             --dark: #2c3e50; --bg: #f4f7f6; --card-bg: #ffffff; --text: #2c3e50;
         }
-        @media (prefers-color-scheme: dark) {
-            :root { --bg: #0a0e0c; --card-bg: #161b18; --text: #c0c0c0; }
-        }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: var(--text); }
-        header { background: var(--primary); color: white; padding: 35px 20px 25px; text-align: center; border-radius: 0 0 30px 30px; }
-        .info-badge { background: var(--gold); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin: -15px auto 15px; display: block; width: fit-content; position: relative; }
+        header { background: var(--primary); color: white; padding: 35px 20px 25px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .info-badge { background: var(--gold); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin: -15px auto 15px; display: block; width: fit-content; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .container { max-width: 500px; margin: auto; padding: 10px 15px; }
-        .search-box { width: 100%; padding: 15px; border-radius: 15px; border: none; font-size: 16px; margin-bottom: 15px; background: var(--card-bg); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.05); box-sizing: border-box; outline: none; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--gray); position: relative; }
+        .search-box { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #ddd; font-size: 16px; margin-bottom: 15px; background: white; color: var(--text); box-sizing: border-box; outline: none; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--gray); position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .card.active-status { border-left-color: var(--primary); }
-        .card.garde-status { border-left-color: var(--accent); background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, transparent 100%); }
-        .card.ferme { opacity: 0.5; filter: grayscale(0.5); }
+        .card.garde-status { border-left-color: var(--accent); background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, #ffffff 100%); }
+        .card.ferme { opacity: 0.6; filter: grayscale(0.8); }
         .pharma-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; gap: 10px; }
-        .name-fr { font-weight: 800; color: var(--primary); font-size: 1rem; line-height: 1.2; }
-        .name-ar { font-size: 1.1rem; font-weight: bold; text-align: right; }
-        .status-pill { font-size: 0.6rem; padding: 3px 8px; border-radius: 8px; font-weight: 900; margin-bottom: 8px; display: inline-block; color: white; text-transform: uppercase; }
+        .name-fr { font-weight: 800; color: var(--primary); font-size: 1.1rem; }
+        .name-ar { font-size: 1.2rem; font-weight: bold; text-align: right; color: #000; }
+        .status-pill { font-size: 0.65rem; padding: 4px 10px; border-radius: 8px; font-weight: 900; margin-bottom: 8px; display: inline-block; color: white; text-transform: uppercase; }
         .pill-garde { background: var(--accent); }
         .pill-ouvert { background: var(--primary); }
         .pill-ferme { background: var(--gray); }
         .btn-group { display: flex; gap: 8px; margin-top: 12px; }
-        .btn { flex: 1; padding: 10px; border-radius: 10px; text-decoration: none; text-align: center; font-weight: bold; font-size: 0.8rem; color: white; }
+        .btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; text-align: center; font-weight: bold; font-size: 0.85rem; color: white; }
     </style>
 </head>
 <body>
 
 <header><h2>Pharma Khénifra</h2></header>
+<div id="ramadan-banner" class="info-badge" style="display:none; background:#2980b9;">🌙 Horaire Ramadan Actif</div>
 <div class="info-badge">Ouvert / Garde en priorité</div>
 
 <div class="container">
     <input type="search" id="searchInput" class="search-box" placeholder="Chercher pharmacie ou quartier..." onkeyup="renderAll()">
-    <div id="main-list">Chargement...</div>
+    <div id="main-list">Chargement des données...</div>
 </div>
 
 <script>
     const URL_GARDES = "https://raw.githubusercontent.com/radouanimiraz-svg/pharma/main/gardes.json"; 
 
+    // Liste des pharmacies (Inchangée)
     const PHARMACIES = [
         { n: "Al Massira Khénifra", ar: "صيدلية المسيرة", q: "Hay Amalou", g: "0535385205", lat: 32.9384, lng: -5.6546 },
         { n: "El Habri", ar: "صيدلية الهبري", q: "Hay Amalou", g: "0535383003", lat: 32.9389, lng: -5.6522 },
         { n: "Le Cedre", ar: "صيدلية الأرز", q: "Hay Amalou", g: "0535586582", lat: 32.9384, lng: -5.6534 },
         { n: "El Nasr", ar: "صيدلية النصر", q: "Hay Amalou", g: "0535383672", lat: 32.9406, lng: -5.6477 },
-        { n: "Ajdir", ar: "أجدير", q: "Route Ajdir", g: "0535382066", lat: 32.9414, lng: -5.6434 },
+        { n: "Ajdir", ar: "صيدلية أجدير", q: "Route Ajdir", g: "0535382066", lat: 32.9414, lng: -5.6434 },
         { n: "Rachid", ar: "رشيد", q: "Taabit", g: "", lat: 32.9443, lng: -5.6369 },
         { n: "Khénifra", ar: "خنيفرة", q: "Hay Oushaq", g: "0535588912", lat: 32.9442, lng: -5.6481 },
         { n: "Zerktouni", ar: "الزرقطوني", q: "Hay Lascirie", g: "0768688461", lat: 32.9457, lng: -5.6532 },
@@ -121,25 +120,49 @@
         } catch (e) { document.getElementById('main-list').innerHTML = "Erreur de connexion."; }
     }
 
-    function getStat(n) {
+    function isRamadan() {
+        const today = new Date();
+        const start = new Date("2026-02-16"); // Selon votre planning
+        const end = new Date("2026-03-22");   // Fin approximative
+        const active = today >= start && today <= end;
+        document.getElementById('ramadan-banner').style.display = active ? 'block' : 'none';
+        return active;
+    }
+
+    function getStat(pName) {
         const now = new Date();
         const day = now.getDay(); 
         const curMin = now.getHours() * 60 + now.getMinutes();
+        const ramadan = isRamadan();
 
+        // 1. HORAIRES D'OUVERTURE NORMALE
         let isNormalHours = false;
-        if (day >= 1 && day <= 5) { // Lun-Ven
-            if ((curMin >= 540 && curMin < 780) || (curMin >= 960 && curMin < 1200)) isNormalHours = true;
-        } else if (day === 6) { // Sam
-            if (curMin >= 540 && curMin < 780) isNormalHours = true;
+        const openMin = ramadan ? 570 : 540; // 09h30 vs 09h00
+        const closeMin = 20 * 60; // 20h00
+
+        if (day >= 1 && day <= 5) {
+            if ((curMin >= openMin && curMin < 13 * 60) || (curMin >= 16 * 60 && curMin < closeMin)) isNormalHours = true;
+        } else if (day === 6) {
+            if (curMin >= openMin && curMin < 13 * 60) isNormalHours = true;
         }
 
-        const isGardeJour = configG.jour?.includes(n);
+        // 2. GARDE DE JOUR (Weekend / Dimanche)
+        const isGardeJour = configG.jour?.includes(pName);
+        const isWeekendClosed = (day === 0) || (day === 6 && curMin >= 13 * 60);
+
+        // 3. GARDE DE NUIT
         let checkDay = day; 
-        if (curMin < 540) checkDay = (day === 0) ? 6 : day - 1;
-        const isGardeNuit = configG.nuit?.[checkDay] === n;
+        if (curMin < 480) checkDay = (day === 0) ? 6 : day - 1;
+        const isGardeNuit = configG.nuit?.[checkDay] === pName;
+        
+        // Seuils de nuit précis selon votre photo
+        const nightStart = ramadan ? (23 * 60 + 30) : (21 * 60); // 23h30 vs 21h00
+        const isNightTime = (curMin >= nightStart || curMin < 480);
 
         if (isNormalHours) return "OUVERT";
-        if (isGardeJour || isGardeNuit) return "GARDE";
+        if (isGardeJour && isWeekendClosed) return "GARDE";
+        if (isGardeNuit && isNightTime) return "GARDE";
+        
         return "FERMÉ";
     }
 
@@ -166,14 +189,14 @@
                         <div class="name-fr">Ph. ${p.n}</div>
                         <div class="name-ar" dir="rtl">${p.ar}</div>
                     </div>
-                    <div style="font-size:0.8rem; opacity:0.7;">📍 ${p.q} ${p.dist ? `(${p.dist.toFixed(1)} km)` : ''}</div>
+                    <div style="font-size:0.85rem; color:#666;">📍 ${p.q} ${p.dist ? `(${p.dist.toFixed(1)} km)` : ''}</div>
                     <div class="btn-group">
-                        <a href="tel:${p.g}" class="btn" style="background:var(--primary); ${!p.g ? 'display:none' : ''}">📞 Appeler</a>
+                        ${p.g ? `<a href="tel:${p.g}" class="btn" style="background:var(--primary)">📞 Appeler</a>` : ''}
                         <a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" class="btn" style="background:var(--dark)">🗺️ Itinéraire</a>
                     </div>
                 </div>`;
         });
-        document.getElementById('main-list').innerHTML = html;
+        document.getElementById('main-list').innerHTML = html || "<p style='text-align:center;'>Aucun résultat</p>";
     }
 
     function getDist(la1, lo1, la2, lo2) {
@@ -184,7 +207,7 @@
     }
 
     init();
-    setInterval(renderAll, 60000);
+    setInterval(renderAll, 30000);
 </script>
 </body>
 </html>
