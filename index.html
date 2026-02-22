@@ -6,6 +6,7 @@
     <title>Pharma Khénifra</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#1e8449">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/822/822143.png">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/822/822143.png">
@@ -19,32 +20,32 @@
             :root { --bg: #0a0e0c; --card-bg: #161b18; --text: #c0c0c0; }
         }
         body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); margin: 0; padding-bottom: 30px; color: var(--text); }
-        header { background: var(--primary); color: white; padding: 35px 20px 25px; text-align: center; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .ramadan-badge { background: var(--gold); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin: -15px auto 15px; display: block; width: fit-content; position: relative; }
+        header { background: var(--primary); color: white; padding: 35px 20px 25px; text-align: center; border-radius: 0 0 30px 30px; }
+        .info-badge { background: var(--gold); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin: -15px auto 15px; display: block; width: fit-content; position: relative; }
         .container { max-width: 500px; margin: auto; padding: 10px 15px; }
         .search-box { width: 100%; padding: 15px; border-radius: 15px; border: none; font-size: 16px; margin-bottom: 15px; background: var(--card-bg); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.05); box-sizing: border-box; outline: none; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-left: 6px solid var(--gray); position: relative; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 18px; margin-bottom: 12px; border-left: 6px solid var(--gray); position: relative; }
         .card.active-status { border-left-color: var(--primary); }
         .card.garde-status { border-left-color: var(--accent); background: linear-gradient(135deg, rgba(231, 76, 60, 0.05) 0%, transparent 100%); }
         .card.ferme { opacity: 0.5; filter: grayscale(0.5); }
-        .pharma-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .name-fr { font-weight: 800; color: var(--primary); }
-        .name-ar { font-size: 1.2rem; font-weight: bold; }
-        .status-pill { font-size: 0.65rem; padding: 4px 10px; border-radius: 10px; font-weight: 900; margin-bottom: 10px; display: inline-block; color: white; text-transform: uppercase; }
+        .pharma-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px; gap: 10px; }
+        .name-fr { font-weight: 800; color: var(--primary); font-size: 1rem; line-height: 1.2; }
+        .name-ar { font-size: 1.1rem; font-weight: bold; text-align: right; }
+        .status-pill { font-size: 0.6rem; padding: 3px 8px; border-radius: 8px; font-weight: 900; margin-bottom: 8px; display: inline-block; color: white; text-transform: uppercase; }
         .pill-garde { background: var(--accent); }
         .pill-ouvert { background: var(--primary); }
         .pill-ferme { background: var(--gray); }
-        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
-        .btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; text-align: center; font-weight: bold; font-size: 0.85rem; color: white; }
+        .btn-group { display: flex; gap: 8px; margin-top: 12px; }
+        .btn { flex: 1; padding: 10px; border-radius: 10px; text-decoration: none; text-align: center; font-weight: bold; font-size: 0.8rem; color: white; }
     </style>
 </head>
 <body>
 
 <header><h2>Pharma Khénifra</h2></header>
-<div class="ramadan-badge">⏰ Planning Normal + Gardes</div>
+<div class="info-badge">Ouvert / Garde en priorité</div>
 
 <div class="container">
-    <input type="search" id="searchInput" class="search-box" placeholder="Rechercher une pharmacie..." onkeyup="renderAll()">
+    <input type="search" id="searchInput" class="search-box" placeholder="Chercher pharmacie ou quartier..." onkeyup="renderAll()">
     <div id="main-list">Chargement...</div>
 </div>
 
@@ -57,9 +58,50 @@
         { n: "Le Cedre", ar: "صيدلية الأرز", q: "Hay Amalou", g: "0535586582", lat: 32.9384, lng: -5.6534 },
         { n: "El Nasr", ar: "صيدلية النصر", q: "Hay Amalou", g: "0535383672", lat: 32.9406, lng: -5.6477 },
         { n: "Ajdir", ar: "أجدير", q: "Route Ajdir", g: "0535382066", lat: 32.9414, lng: -5.6434 },
-        { n: "Zerktouni", ar: "صيدلية الزرقطوني", q: "Hay Lascirie", g: "0768688461", lat: 32.9457, lng: -5.6532 },
-        { n: "Aliaa", ar: "صيدلية علياء", q: "Almassira Al Wossta", g: "0535383678", lat: 32.9210, lng: -5.6628 },
-        { n: "Principale Khénifra", ar: "الصيدلية الرئيسية", q: "Centre Ville", g: "0535384606", lat: 32.9393, lng: -5.6718 }
+        { n: "Rachid", ar: "رشيد", q: "Taabit", g: "", lat: 32.9443, lng: -5.6369 },
+        { n: "Khénifra", ar: "خنيفرة", q: "Hay Oushaq", g: "0535588912", lat: 32.9442, lng: -5.6481 },
+        { n: "Zerktouni", ar: "الزرقطوني", q: "Hay Lascirie", g: "0768688461", lat: 32.9457, lng: -5.6532 },
+        { n: "La Scierie", ar: "لاسيري", q: "Hay Lascirie", g: "", lat: 32.9453, lng: -5.6567 },
+        { n: "Al Oumrane", ar: "العمران", q: "Al Oumrane", g: "", lat: 32.9475, lng: -5.6504 },
+        { n: "Tazart Iaaraden", ar: "تزارت إعراضن", q: "Tazart Iaaraden", g: "", lat: 32.9494, lng: -5.6536 },
+        { n: "Ennajd", ar: "النجد", q: "Hay Annajd", g: "0535383495", lat: 32.9493, lng: -5.6595 },
+        { n: "Ibn Rochd", ar: "ابن رشد", q: "Hay Pizzana", g: "0535588889", lat: 32.9482, lng: -5.6646 },
+        { n: "Hôpital", ar: "المستشفى", q: "Route Meknes", g: "", lat: 32.9590, lng: -5.6652 },
+        { n: "Al Masjid", ar: "المسجد", q: "Hay Moha Oubouazza", g: "", lat: 32.9421, lng: -5.6559 },
+        { n: "Fatima", ar: "فاطمة", q: "Hay Boulahya", g: "", lat: 32.9417, lng: -5.6523 },
+        { n: "El Kors", ar: "الكورص", q: "Hay El Kors", g: "", lat: 32.9305, lng: -5.6610 },
+        { n: "Chaab", ar: "الشعب", q: "Hay El Kors", g: "0538695890", lat: 32.9283, lng: -5.6591 },
+        { n: "Ibn Sina", ar: "ابن سينا", q: "Hay Oum Errabia", g: "", lat: 32.9372, lng: -5.6590 },
+        { n: "Karaouia", ar: "القروية", q: "Hay Karaouia", g: "0535384848", lat: 32.9392, lng: -5.6593 },
+        { n: "Jabbour", ar: "جبور", q: "Bd Al Massira Khadra", g: "", lat: 32.9379, lng: -5.6633 },
+        { n: "Najah", ar: "النجاح", q: "Hay Annajah", g: "", lat: 32.9339, lng: -5.6692 },
+        { n: "Touhami", ar: "التهامي", q: "Hay Ikhamen", g: "0535587800", lat: 32.9321, lng: -5.6651 },
+        { n: "8 Mars", ar: "8 مارس", q: "Hay Pam", g: "0535388834", lat: 32.9321, lng: -5.6687 },
+        { n: "Gare Routiere", ar: "المحطة", q: "Hay Metchifssan", g: "", lat: 32.9302, lng: -5.6687 },
+        { n: "Achbarou", ar: "أشبارو", q: "Hay Achbarou", g: "", lat: 32.9265, lng: -5.6670 },
+        { n: "Marche verte", ar: "المسيرة الخضراء", q: "Hay Achbarou", g: "0661649124", lat: 32.9238, lng: -5.6658 },
+        { n: "Massira Soufla", ar: "المسيرة السفلى", q: "Hay Almassira Soufla", g: "0535384043", lat: 32.9208, lng: -5.6670 },
+        { n: "Aliaa", ar: "علياء", q: "Hay Almassira Al Wossta", g: "0535383678", lat: 32.9210, lng: -5.6628 },
+        { n: "La Grande", ar: "الكبرى", q: "Hay Almassira Al Wossta", g: "0532323737", lat: 32.9177, lng: -5.6646 },
+        { n: "Errahma", ar: "الرحمة", q: "Hay Almassira", g: "", lat: 32.9240, lng: -5.6697 },
+        { n: "Zayane", ar: "زيان", q: "Centre Ville", g: "", lat: 32.9346, lng: -5.6712 },
+        { n: "Azir", ar: "أزير", q: "Centre Ville", g: "", lat: 32.9368, lng: -5.6708 },
+        { n: "Hamria", ar: "حمرية", q: "Hay Hamria", g: "0535586701", lat: 32.9308, lng: -5.6748 },
+        { n: "Al Amal", ar: "الأمل", q: "Hay Hamria", g: "", lat: 32.9330, lng: -5.6723 },
+        { n: "Oum Rabiee", ar: "أم الربيع", q: "Centre Ville", g: "", lat: 32.9384, lng: -5.6747 },
+        { n: "Nouvelle", ar: "الجديدة", q: "Centre Ville", g: "", lat: 32.9397, lng: -5.6756 },
+        { n: "Principale", ar: "الرئيسية", q: "Centre Ville", g: "0535384606", lat: 32.9393, lng: -5.6718 },
+        { n: "Atlas Healing", ar: "أطلس هيلينك", q: "Hay Essalam", g: "", lat: 32.9433, lng: -5.6700 },
+        { n: "Ezzohour", ar: "الزهور", q: "Hay Essalam", g: "", lat: 32.9435, lng: -5.6754 },
+        { n: "Ghrissi", ar: "غريسي", q: "Av Mohammed 5", g: "", lat: 32.9428, lng: -5.6772 },
+        { n: "Afilal", ar: "أفيلال", q: "Av Mohammed 5", g: "", lat: 32.9446, lng: -5.6787 },
+        { n: "Assaka", ar: "أسكا", q: "Hay Assaka", g: "0535382029", lat: 32.9469, lng: -5.6763 },
+        { n: "El Fath", ar: "الفتح", q: "Hay Assaka", g: "", lat: 32.9464, lng: -5.6805 },
+        { n: "Boufloucen", ar: "بوفلوسن", q: "Hay Al Fath", g: "0766880260", lat: 32.9460, lng: -5.6829 },
+        { n: "Walili", ar: "وليلي", q: "Hay Al Fath", g: "0535383746", lat: 32.9483, lng: -5.6831 },
+        { n: "Tiaallalin", ar: "تيعلالين", q: "Hay Tiallaline", g: "", lat: 32.9388, lng: -5.6772 },
+        { n: "Atlas", ar: "أطلس", q: "Centre Ville", g: "0535586506", lat: 32.9362, lng: -5.6738 },
+        { n: "Aglmam azegza", ar: "أكلمام أزكزا", q: "Bd Ezzarktouni", g: "", lat: 32.9350, lng: -5.6677 }
     ];
 
     let configG = { jour: [], nuit: {} };
@@ -73,26 +115,21 @@
                 navigator.geolocation.getCurrentPosition(pos => {
                     userPos = {lat: pos.coords.latitude, lng: pos.coords.longitude};
                     renderAll();
-                }, () => renderAll());
+                }, () => renderAll(), {timeout: 5000});
             }
             renderAll();
-        } catch (e) { document.getElementById('main-list').innerHTML = "Erreur de chargement."; }
+        } catch (e) { document.getElementById('main-list').innerHTML = "Erreur de connexion."; }
     }
 
     function getStat(n) {
         const now = new Date();
         const day = now.getDay(); 
-        const hour = now.getHours();
-        const min = now.getMinutes();
-        const curMin = hour * 60 + min;
+        const curMin = now.getHours() * 60 + now.getMinutes();
 
         let isNormalHours = false;
-        // Lundi-Vendredi: 9h-13h & 16h-20h
-        if (day >= 1 && day <= 5) {
+        if (day >= 1 && day <= 5) { // Lun-Ven
             if ((curMin >= 540 && curMin < 780) || (curMin >= 960 && curMin < 1200)) isNormalHours = true;
-        } 
-        // Samedi: 9h-13h
-        else if (day === 6) {
+        } else if (day === 6) { // Sam
             if (curMin >= 540 && curMin < 780) isNormalHours = true;
         }
 
@@ -108,12 +145,8 @@
 
     function renderAll() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        let list = PHARMACIES.map(p => {
-            const d = userPos ? getDist(userPos.lat, userPos.lng, p.lat, p.lng) : null;
-            return { ...p, dist: d, status: getStat(p.n) };
-        });
+        let list = PHARMACIES.map(p => ({ ...p, dist: userPos ? getDist(userPos.lat, userPos.lng, p.lat, p.lng) : null, status: getStat(p.n) }));
 
-        // TRI : Ouvert ou Garde en haut, puis par distance
         list.sort((a, b) => {
             const aActive = a.status !== "FERMÉ";
             const bActive = b.status !== "FERMÉ";
@@ -135,8 +168,8 @@
                     </div>
                     <div style="font-size:0.8rem; opacity:0.7;">📍 ${p.q} ${p.dist ? `(${p.dist.toFixed(1)} km)` : ''}</div>
                     <div class="btn-group">
-                        <a href="tel:${p.g}" class="btn" style="background:var(--primary); ${!p.g ? 'display:none' : ''}">Appeler</a>
-                        <a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" class="btn" style="background:var(--dark)">Itinéraire</a>
+                        <a href="tel:${p.g}" class="btn" style="background:var(--primary); ${!p.g ? 'display:none' : ''}">📞 Appeler</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" class="btn" style="background:var(--dark)">🗺️ Itinéraire</a>
                     </div>
                 </div>`;
         });
